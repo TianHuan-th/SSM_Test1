@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!--suppress ALL-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>角色管理</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/layui/layui.js"></script>
+
+</head>
+<body>
+<table lay-even lay-skin="line" lay-size="lg" id="demo" lay-filter="test" class="layui-table">
+</table>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-xs" lay-event="update">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <a class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1">添加</i></a>
+        </button>
+    </div>
+</script>
+<script>
+    var par = "";
+    layui.use(['table', 'form', 'layer'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        //table
+        table.render({
+            toolbar: '#toolbarDemo'
+            , elem: '#demo'
+            , height: 400
+            , url: '/queryRole.do' //数据接口
+            , cols: [[ //表头
+                {field: 'rolename', title: '角色', width: 200}
+                , {title: '操作', width: 300, toolbar: '#barDemo'}
+            ]]
+        });
+
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            var dataall = checkStatus.data;
+            switch (obj.event) {
+                case 'add'://添加
+                    layer.open({//弹层
+                        type: 2,
+                        content: 'addrole.html',
+                        anim: 2,
+                        area: ['700px', '400px'],
+                        end: function (index, layero) {//弹层销毁
+                            layer.msg('GoodBye!');
+                            table.reload('demo', {
+                                url: '/queryRole.do'
+                            });
+                            return false;
+                        }
+                    });
+                    break;
+                case 'del':
+                    break;
+            }
+            ;
+        });
+
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+            if (layEvent === 'detail') { //查看
+                layer.open({
+                    type: 2,
+                    content: "/rwithrr.do?roleid="+data.roleid+"&rolename="+data.rolename,
+                    anim: 2,
+                    area: ['700px', '400px'],
+                    end: function (index, layero) {//弹层销毁
+                        layer.msg('GoodBye!');
+                        table.reload('demo', {
+                            url: '/queryRole.do'
+                        });
+                        return false;
+                    }
+                });
+            } else if (layEvent === 'del') { //删除
+                layer.confirm('<i class="layui-icon layui-icon-face-surprised">确定要分开嘛？</i>', {
+                    btn: ['忍痛割爱'],
+                    btn1: function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "/deleteRole/" + data.roleid + ".do",
+                            data: {
+                                "_method": "DELETE",
+                            },
+                            success: function (data) {
+                                location.reload();
+                            },
+                            error: function (data) {
+                                location.reload();
+                            }
+                        });
+                    }
+                });
+            } else if (layEvent === 'update') { //编辑
+                layer.open({
+                    type: 2,
+                    content: "/upRole/" + data.roleid + ".do",
+                    anim: 2,
+                    area: ['700px', '400px'],
+                    end: function (index, layero) {//弹层销毁
+                        layer.msg('GoodBye!');
+                        table.reload('demo', {
+                            url: '/queryRole.do'
+                        });
+                        return false;
+                    }
+                });
+
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

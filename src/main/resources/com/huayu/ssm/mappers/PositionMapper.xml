@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huayu.ssm.mappers.PositionMapper" >
+  <resultMap id="BaseResultMap" type="com.huayu.ssm.pojo.Position" >
+    <id column="posid" property="posid" jdbcType="INTEGER" />
+    <result column="posname" property="posname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    posid, posname
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huayu.ssm.pojo.PositionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from position
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from position
+    where posid = #{posid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from position
+    where posid = #{posid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huayu.ssm.pojo.PositionExample" >
+    delete from position
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huayu.ssm.pojo.Position" >
+    insert into position (posid, posname)
+    values (#{posid,jdbcType=INTEGER}, #{posname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huayu.ssm.pojo.Position" >
+    insert into position
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="posid != null" >
+        posid,
+      </if>
+      <if test="posname != null" >
+        posname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="posid != null" >
+        #{posid,jdbcType=INTEGER},
+      </if>
+      <if test="posname != null" >
+        #{posname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huayu.ssm.pojo.PositionExample" resultType="java.lang.Integer" >
+    select count(*) from position
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update position
+    <set >
+      <if test="record.posid != null" >
+        posid = #{record.posid,jdbcType=INTEGER},
+      </if>
+      <if test="record.posname != null" >
+        posname = #{record.posname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update position
+    set posid = #{record.posid,jdbcType=INTEGER},
+      posname = #{record.posname,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huayu.ssm.pojo.Position" >
+    update position
+    <set >
+      <if test="posname != null" >
+        posname = #{posname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where posid = #{posid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huayu.ssm.pojo.Position" >
+    update position
+    set posname = #{posname,jdbcType=VARCHAR}
+    where posid = #{posid,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectPosByEid" parameterType="String" resultType="Position">
+    select * from position where posid in (${value});
+  </select>
+
+</mapper>

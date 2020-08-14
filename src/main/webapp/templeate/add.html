@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--suppress ALL-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加员工</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        $(function(){
+            $.get("/dept.do",function(data){
+                if(null!=data){
+                    var str="";
+                    for(var i=0;i<data.length;i++){
+                        str+="<option value='"+data[i].deptId+"'>"+data[i].dname+"</option>"
+                    }
+                    $("#ses").html(str);
+                }
+            });
+
+            $.get("/position.do",function(data){
+                if(null!=data){
+                    var str="";
+                    for(var i=0;i<data.length;i++){
+                        str+="<input type='checkbox' value='"+data[i].posid+"' name='pid' />"+data[i].posname
+                    }
+                    $("#pid").html(str);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<form action="/zhuce.do" method="post" enctype="multipart/form-data">
+    姓名:<input type="text" name="name" /><br>
+    性别:<input type="radio" name="sex" value="男">男
+    <input type="radio" name="sex" value="女">女<br>
+    身份证附件:<input type="file" name="idfile" /><br>
+    选择一个部门:<select id="ses" name="did">
+</select><br>
+    选择职位(可多选):<span id="pid"></span>
+    <br><input type="submit" value="注册" />
+</form>
+</body>
+</html>

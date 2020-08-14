@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--使用LOG4J日志功能-->
+        <setting name="logImpl" value="org.apache.ibatis.logging.log4j2.Log4j2Impl"/>
+        <!--开启数据库字段转驼峰格式-->
+        <setting name="defaultExecutorType" value="SIMPLE"/>
+    </settings>
+
+    <typeAliases>
+        <!--单个配置别名
+        <typeAlias type="com.huayu.springall.pojo.Student" alias="student"></typeAlias>-->
+        <!--批量配置别名  别名就是类名 首字母大小写都可以-->
+        <package name="com.huayu.ssm.pojo"></package>
+    </typeAliases>
+
+    <!--分页插件-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+    </plugins>
+
+</configuration>

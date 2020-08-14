@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--suppress ALL-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>设置角色权限</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/layui/layui.js"></script>
+</head>
+<body>
+<input type="hidden" th:value="${rrList}" id="rrlist" />
+<center><input type="text" readonly th:value="${rolename}" /></center><br>
+<form class="layui-form layui-form-pane" th:action="@{/emp.do}"  method="post">
+<input type="hidden" name="roleId" th:value="${roleid}">
+    <div class="layui-form-item">
+        <div class="demo-tree-more" id="test12"></div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="sub">立即赋权</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['table', 'form', 'layer', 'tree'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        var layer = layui.layer;
+        var tree = layui.tree;
+        var $=layui.jquery;
+
+        /*获取到树形组件的ID后边直接传参到服务即可*/
+        form.on('submit(sub)', function (data) {
+            var str="";
+            var checkData = tree.getChecked('demoId');
+            if(checkData.length>0){
+                for (var i=0;i<checkData.length;i++){
+                    if(checkData[i].children.length>0){
+                        for(var j=0;j<checkData[i].children.length;j++){
+                            str+=checkData[i].children[j].id+","
+                        }
+                    }
+                }
+                var strr=str.substring(0,str.length-1);
+            }else{
+                str="";
+            }
+            /*alert(checkData[0].children);*/
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        $(function () {
+            $.get("/rwithr.do", function (data2) {
+                tree.render({
+                    elem: '#test12'
+                    ,data: data2
+                    ,showCheckbox: true
+                    ,id: 'demoId'
+                });
+                /*将字符串转成数组*/
+                var at=$("#rrlist").val().split(",");
+                if(at.length>1){
+                    var arr=$("#rrlist").val().split(",");
+                    tree.setChecked('demoId',at);//默认选中多个
+                }else{
+                    tree.setChecked('demoId',parseInt($("#rrlist").val()));//默认选中一个
+                }
+
+            });
+
+        });
+
+
+    });
+</script>
+</body>
+</html>

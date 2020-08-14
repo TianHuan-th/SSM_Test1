@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--suppress ALL-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/layui/layui.js"></script>
+</head>
+<body>
+<form class="layui-form layui-form-pane" th:action="@{/updateRole.do}"  method="post">
+    <input type="hidden" name="_method" value="PUT" >
+    <input type="hidden" name="roleid" th:value="${role.roleid}" >
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-inline">
+            <input name="rolename" class="layui-input" type="text" th:value="${role.rolename}" placeholder="请输入姓名" autocomplete="off"
+                   lay-verify="required">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="sub">立即修改</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['form', 'layer','upload'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var $=layui.jquery;
+        form.on('submit(sub)', function(data){
+            //当你在iframe页面关闭自身时
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        });
+
+    });
+</script>
+</body>
+</html>

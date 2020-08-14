@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huayu.ssm.mappers.RoleMapper" >
+    <select id="rootOfRole" parameterType="int" resultType="com.huayu.ssm.bo.RoleWithRoot1">
+      select * from rolewithroot rwr,root r where rwr.rotid=r.rootid and rwr.roleid=#{value}
+    </select>
+</mapper>
